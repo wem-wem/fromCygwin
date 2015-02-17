@@ -1,0 +1,10 @@
+cd $HOME/wem-wem.github.com(フォルダ名)
+↓
+git add 「追加するフォルダ名」
+↓
+git commit -m 'コメント記入'
+↓
+git push origin master
+
+
+初期化方法などについてはLy君参照。
