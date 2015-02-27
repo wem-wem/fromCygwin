@@ -1,8 +1,24 @@
-// stdafx.cpp : 標準インクルード 読み込み・書き込みテスト.pch のみを
-// 含むソース ファイルは、プリコンパイル済みヘッダーになります。
-// stdafx.obj にはプリコンパイル済み型情報が含まれます。
+// 読み込み・書き込みテスト.cpp : コンソール アプリケーションのエントリ ポイントを定義します。
+//
 
 #include "stdafx.h"
+#include <fstream>
+#include <string>
+#include <iostream>
 
-// TODO: このファイルではなく、STDAFX.H で必要な
-// 追加ヘッダーを参照してください。
+#define TEXT_NUM (4)
+
+std::ifstream inf("res/test.txt");
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+  // 読み込みをテキストの数だけ繰り返す
+  for (int i = 0; i < TEXT_NUM; i++){
+    std::string str;
+    inf >> str;
+    std::cout << str << std::endl;
+  }
+
+  return 0;
+}
+
