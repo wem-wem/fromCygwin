@@ -10,7 +10,7 @@ int main() {
     env.setupDraw();
 
     title->drawBg();
-
+    title->NextPart(env);
     // Ｅキーで終了
     if (env.isPushKey('E')){
       delete title;

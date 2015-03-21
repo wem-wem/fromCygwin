@@ -36,13 +36,16 @@ void Title::drawBg(){
 
 // 次のパートへ移行する際の演出
 void Title::NextPart(AppEnv env){
+  // sin波で波打つように表示
+  float x = std::sin(1) * 25.0;
+
   if (env.isPushButton(Mouse::LEFT)){
     isClick = true;
   }
 
   // クリックされていなければ
   if (!isClick){
-    drawTextureBox(-WIDTH/2, -128,
+    drawTextureBox(-WIDTH/2, -128 + x,
       WIDTH, 128,
       0, 0, 512, 128,
       *Title_Tex[Click_to_Start], Color(1,1,1));
