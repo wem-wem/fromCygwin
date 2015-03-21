@@ -20,5 +20,5 @@ public:
   bool isClick;
 
   void drawBg();
-  void NextPart(AppEnv);
+  void NextPart(AppEnv&);
 };

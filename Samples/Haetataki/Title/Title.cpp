@@ -35,7 +35,7 @@ void Title::drawBg(){
 
 
 // 次のパートへ移行する際の演出
-void Title::NextPart(AppEnv env){
+void Title::NextPart(AppEnv& env){
   // sin波で波打つように表示
   float x = std::sin(1) * 25.0;
 

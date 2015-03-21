@@ -20,5 +20,5 @@ public:
   virtual void drawBg() = 0;
 
   // 次のパートへ移行する
-  virtual void NextPart(AppEnv) = 0;
+  virtual void NextPart(AppEnv&) = 0;
 };
