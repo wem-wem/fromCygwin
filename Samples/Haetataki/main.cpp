@@ -10,7 +10,7 @@ int main() {
     env.setupDraw();
 
     title->drawBg();
-    title->NextPart(env);
+    title->NextPart(env); // 削除された関数です。って出る(´・ω・｀)
     // Ｅキーで終了
     if (env.isPushKey('E')){
       delete title;
