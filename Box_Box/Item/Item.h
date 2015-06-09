@@ -3,24 +3,24 @@
 #include "cinder/Rand.h"
 #include "../common.h"
 
-struct Cube{
-	TriMesh cube_mesh;
-	TriMesh cs_mesh;
+struct Item_obj{
+	TriMesh item_mesh;
+	TriMesh is_mesh;
 	Vec3f pos;		  // キューブそれぞれのポジション
 	Vec3f size;
 	float shadow_width;
+	bool get_flag;
 };
 
-class FallCube{
+class Item{
 public:
-	TriMesh c_mesh;
+	TriMesh i_mesh;
 	TriMesh shadow_mesh; // 影用のメッシュ情報
-	float gravity;    // 重力
+	std::vector<Item_obj> obj;
+	Vec3f rotate;
 
-	std::vector<Cube> cube;
-
-	FallCube();
-	~FallCube(){};
+	Item();
+	~Item(){};
 
 	void update();
 	void draw();

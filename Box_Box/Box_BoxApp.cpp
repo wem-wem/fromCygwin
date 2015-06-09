@@ -2,10 +2,11 @@
 #include "Player/Player.h"
 #include "Ground/Ground.h"
 #include "FallCube/FallCube.h"
+#include "Item/Item.h"
+#include "Title/Title.h"
 
 class Box_BoxApp : public AppNative {
 private:
-
 	// ライト
 	std::unique_ptr<gl::Light> light;
 
@@ -16,6 +17,18 @@ private:
 	Player player;
 	Ground ground;
 	FallCube fallcube;
+	Item item;
+	Title title;
+
+	// シーン切り替え用
+	unsigned int scene;
+	enum{
+		TITLE,
+		GAME,
+		RESULT
+	};
+
+	float rz;
 
 public:
 	void setup();
@@ -39,7 +52,7 @@ void Box_BoxApp::setup()
 	camera = CameraPersp(getWindowWidth(), getWindowHeight(),
 		35.0, 200.0, 1000.0);
 
-	camera.lookAt(Vec3f(0.0, 300.0, 300.0), // Z軸700の地点から
+	camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
 		Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
 
 
@@ -58,22 +71,76 @@ void Box_BoxApp::setup()
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 
+	Rand::randomize();
+	scene = 0;
+	title.setup();
 }
 
 void Box_BoxApp::keyDown(KeyEvent event)
 {
-	player.keyDown(event);
+#pragma region デバッグ機能(シーン切り替え)
+	if (event.getCode() == KeyEvent::KEY_t)
+	{
+		camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
+			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
+		scene = TITLE;
+		rz = 600.0f;
+	}
+
+	if (event.getCode() == KeyEvent::KEY_g)
+	{
+		scene = GAME;
+		camera.lookAt(Vec3f(0.0, 300.0, 300.0), // Y軸300, Z軸300の地点から
+			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
+	}
+#pragma endregion
+
+
+	switch (scene){
+	case TITLE:
+		break;
+
+	case GAME:
+		player.keyDown(event);
+		break;
+
+	case RESULT:
+		break;
+	}
 }
 
-void Box_BoxApp::keyUp( KeyEvent event )
+void Box_BoxApp::keyUp(KeyEvent event)
 {
-	player.keyUp(event);
+	switch (scene){
+	case TITLE:
+		break;
+
+	case GAME:
+		player.keyUp(event);
+		break;
+
+	case RESULT:
+		break;
+	}
 }
 
 void Box_BoxApp::update()
 {
-	player.update();
-	fallcube.update();
+	switch (scene){
+	case TITLE:
+		title.update();
+		break;
+
+	case GAME:
+		player.SetReference(&fallcube, &item);
+		player.update();
+		fallcube.update();
+		item.update();
+		break;
+
+	case RESULT:
+		break;
+	}
 }
 
 void Box_BoxApp::draw()
@@ -85,16 +152,27 @@ void Box_BoxApp::draw()
 	// 視点座標変換用と正規化デバイス座標変換用の２つを用意する
 	gl::setMatrices(camera);
 
+
 	// ライティング開始
 	light->enable();
 
-	ground.draw();
+	switch (scene){
+	case TITLE:
+		title.draw();
+		break;
 
-	player.draw();
+	case GAME:
+		ground.draw();
+		player.draw();
+		fallcube.draw();
+		item.draw();
+		break;
 
-	fallcube.draw();
+	case RESULT:
+		break;
+	}
 
 	light->disable();
 }
 
-CINDER_APP_NATIVE( Box_BoxApp, RendererGl )
+CINDER_APP_NATIVE(Box_BoxApp, RendererGl)

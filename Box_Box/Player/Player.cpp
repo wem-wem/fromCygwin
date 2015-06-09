@@ -1,5 +1,6 @@
 #include "Player.h"
 
+#pragma region コンストラクタ
 Player::Player(){
 	// 立方体の頂点座標を指定--------------------------------------------------------
 	Vec3f vertices[] = {
@@ -92,13 +93,18 @@ Player::Player(){
 
 	p_mesh.recalculateNormals();
 
-	pos = Vec3f(0, 15, 0); // プレイヤーの初期位置
+	pos = Vec3f(0, 15, 0);			// プレイヤーの初期位置
+	size = Vec3f(8.0f, 8.0f, 8.0f); // プレイヤーの大きさ
 	gravity = 0.0f;
+	move_speed = 1.0f;
 	get_A = get_S = get_D = get_W = get_SPACE = false;
 	isjumping = false;
+	shadow_size = 8.0f;
 }
+#pragma endregion
 
-// キーが押された時の判定
+
+#pragma region キーが押された時の判定
 void Player::keyDown(KeyEvent event){
 	if (event.getCode() == KeyEvent::KEY_a){
 		get_A = true;
@@ -122,8 +128,10 @@ void Player::keyDown(KeyEvent event){
 		isjumping = true;
 	}
 }
+#pragma endregion
 
-// キーを離した時の判定
+
+#pragma region  キーを離した時の判定
 void Player::keyUp(KeyEvent event){
 	if (event.getCode() == KeyEvent::KEY_a){
 		get_A = false;
@@ -146,32 +154,184 @@ void Player::keyUp(KeyEvent event){
 		get_SPACE = false;
 	}
 }
+#pragma endregion
 
 
+#pragma region 各クラスのポインタを取得
+void Player::SetReference(FallCube* fc_ref, Item* i_ref){
+	fallcube_ref = fc_ref;
+	item_ref = i_ref;
+}
+#pragma endregion
+
+
+#pragma region 自機左面の当たり判定
+bool Player::isCollisionFallCube_A(){
+	for (unsigned int i = 0; i < fallcube_ref->cube.size(); i++){
+		// fallcube の下辺との当たり判定
+		if (fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y < pos.y + size.y &&
+			fallcube_ref->cube[i].pos.y + fallcube_ref->cube[i].size.y > pos.y - size.y){
+
+			// fallcube の右面との当たり判定
+			if (fallcube_ref->cube[i].pos.x + fallcube_ref->cube[i].size.x + move_speed / 2 > pos.x - size.x &&
+				fallcube_ref->cube[i].pos.x + fallcube_ref->cube[i].size.x - move_speed / 2 < pos.x - size.x &&
+				fallcube_ref->cube[i].pos.z + fallcube_ref->cube[i].size.z > pos.z - size.z &&
+				fallcube_ref->cube[i].pos.z - fallcube_ref->cube[i].size.z < pos.z + size.z)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+
+#pragma region 自機右面の当たり判定
+bool Player::isCollisionFallCube_D(){
+	for (unsigned int i = 0; i < fallcube_ref->cube.size(); i++){
+		// fallcube の下辺との当たり判定
+		if (fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y < pos.y + size.y &&
+			fallcube_ref->cube[i].pos.y + fallcube_ref->cube[i].size.y > pos.y - size.y)
+		{
+			// fallcube の左面との当たり判定
+			if (fallcube_ref->cube[i].pos.x - fallcube_ref->cube[i].size.x - move_speed / 2 < pos.x + size.x &&
+				fallcube_ref->cube[i].pos.x - fallcube_ref->cube[i].size.x + move_speed / 2 > pos.x + size.x &&
+				fallcube_ref->cube[i].pos.z + fallcube_ref->cube[i].size.z > pos.z - size.z &&
+				fallcube_ref->cube[i].pos.z - fallcube_ref->cube[i].size.z < pos.z + size.z)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+
+#pragma region 自機の奥の面の当たり判定
+bool Player::isCollisionFallCube_W(){
+	for (unsigned int i = 0; i < fallcube_ref->cube.size(); i++){
+		// fallcube の下辺との当たり判定
+		if (fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y < pos.y + size.y &&
+			fallcube_ref->cube[i].pos.y + fallcube_ref->cube[i].size.y > pos.y - size.y)
+		{
+			// fallcube の手前の面との当たり判定
+			if (fallcube_ref->cube[i].pos.x + fallcube_ref->cube[i].size.x > pos.x - size.x &&
+				fallcube_ref->cube[i].pos.x - fallcube_ref->cube[i].size.x < pos.x + size.x &&
+				fallcube_ref->cube[i].pos.z + fallcube_ref->cube[i].size.z + move_speed / 2 > pos.z - size.z &&
+				fallcube_ref->cube[i].pos.z - fallcube_ref->cube[i].size.z - move_speed / 2 < pos.z + size.z)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+
+#pragma region 自機の手前の面の当たり判定
+bool Player::isCollisionFallCube_S(){
+	for (unsigned int i = 0; i < fallcube_ref->cube.size(); i++){
+		// fallcube の下辺との当たり判定
+		if (fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y < pos.y + size.y &&
+			fallcube_ref->cube[i].pos.y + fallcube_ref->cube[i].size.y > pos.y - size.y)
+		{
+			// fallcube の奥の面との当たり判定
+			if (fallcube_ref->cube[i].pos.x + fallcube_ref->cube[i].size.x > pos.x - size.x &&
+				fallcube_ref->cube[i].pos.x - fallcube_ref->cube[i].size.x < pos.x + size.x &&
+				fallcube_ref->cube[i].pos.z + fallcube_ref->cube[i].size.z + move_speed / 2 > pos.z - size.z &&
+				fallcube_ref->cube[i].pos.z - fallcube_ref->cube[i].size.z - move_speed / 2 < pos.z + size.z)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+
+#pragma region アイテムの取得判定
+void Player::isCollisionItem(){
+	for (unsigned int i = 0; i < item_ref->obj.size(); i++)
+	{
+		// アイテムの底辺よりも自機の上辺が高い時
+		if (pos.y + size.y >= item_ref->obj[i].pos.y &&
+			pos.y - size.y <= item_ref->obj[i].pos.y)
+		{
+			// 自機の左右両面の間
+			if (pos.x + size.x >= item_ref->obj[i].pos.x &&
+				pos.x - size.x <= item_ref->obj[i].pos.x)
+			{
+				// 自機の手前と奥の面の間
+				if (pos.z + size.z >= item_ref->obj[i].pos.z &&
+					pos.z - size.z <= item_ref->obj[i].pos.z)
+				{
+					item_ref->obj[i].get_flag = true;
+				}
+			}
+		}
+	}
+}
+#pragma endregion
+
+
+#pragma region 更新処理
 void Player::update(){
-	float ground_end = 90.0f;
+	float ground_end = 92.0f;
+	isCollisionItem();
 
-	if (get_A){
-		if (pos.x > -ground_end){
-			pos.x += -1.0f; // 左移動
+	if (!isCollisionFallCube_A()){
+		if (get_A){
+			if (pos.x > -ground_end){
+				pos.x += -move_speed; // 左移動
+			}
 		}
 	}
 
-	if (get_D){
-		if (pos.x < ground_end){
-			pos.x += 1.0f; // 左移動
+	if (!isCollisionFallCube_D()){
+		if (get_D){
+			if (pos.x < ground_end){
+				pos.x += move_speed; // 右移動
+			}
 		}
 	}
 
-	if (get_W){
-		if (pos.z > -ground_end){
-			pos.z += -1.0f; // 左移動
+	if (!isCollisionFallCube_W()){
+		if (get_W){
+			if (pos.z > -ground_end){
+				pos.z += -move_speed; // 奥へ移動
+			}
 		}
 	}
 
-	if (get_S){
-		if (pos.z < ground_end){
-			pos.z += 1.0f; // 左移動
+	if (!isCollisionFallCube_S()){
+		if (get_S){
+			if (pos.z < ground_end){
+				pos.z += move_speed; // 手前へ移動
+			}
 		}
 	}
 
@@ -187,18 +347,22 @@ void Player::update(){
 		gravity = 0;
 		pos.y = 15.0f;
 		isjumping = false;
+		shadow_size = 8.0f;
 	}
 	else{
+		shadow_size += 8.0f / (2.0f * 2.0f);
 		get_SPACE = false;
 	}
 }
+#pragma endregion
 
 
+#pragma region 描画処理
 void Player::draw(){
 	// 自機の情報と表示
 	gl::pushModelView(); // ここから-------------------------------------
 	gl::translate(pos.x, pos.y, pos.z);
-	gl::scale(10.0f, 10.0f, 10.0f);
+	gl::scale(size.x, size.y, size.z);
 	gl::rotate(Vec3f(0.0f, 0.0f, 0.0f));
 	gl::draw(p_mesh);	// ポリゴンを描画
 	gl::popModelView();  // ここまで-------------------------------------
@@ -211,3 +375,4 @@ void Player::draw(){
 	gl::draw(shadow_mesh);	// ポリゴンを描画
 	gl::popModelView();  // ここまで-------------------------------------
 }
+#pragma endregion
