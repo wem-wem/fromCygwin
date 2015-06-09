@@ -24,7 +24,7 @@ public:
 	Title();
 	~Title(){};
 
-	void keyDown(KeyEvent event);
+	void keyDown(KeyEvent event, unsigned int& scene);
 	void setup();
 	void update();
 	void draw();

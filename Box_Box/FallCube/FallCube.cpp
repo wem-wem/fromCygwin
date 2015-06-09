@@ -97,6 +97,7 @@ FallCube::FallCube(){
 #pragma endregion
 
 	c_mesh.recalculateNormals();
+	Rand::randomize();
 
 	gravity = 0.5f;
 

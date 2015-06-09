@@ -1,5 +1,6 @@
 #include "Title.h"
 
+#pragma region コンストラクタ
 Title::Title(){
 #pragma region 立方体の頂点座標を指定
 	Vec3f vertices[] = {
@@ -74,9 +75,6 @@ Title::Title(){
 
 	title_mesh.recalculateNormals();
 
-
-	rogo_z = Vec3f(0, 0, 0);
-
 #pragma region 各ボックスの表示座標
 	for (int i = 0; i <= 52; i ++){
 		// B
@@ -143,11 +141,15 @@ Title::Title(){
 		string_cube[50] = { title_mesh, Vec3f(190.0f, 40.0f, -100.0f), Vec3f(10.0f, 10.0f, 10.0f), false };
 		string_cube[51] = { title_mesh, Vec3f(230.0f, 40.0f, -100.0f), Vec3f(10.0f, 10.0f, 10.0f), false };
 	}
+#pragma endregion
 
+	// 変数の初期化
+	rogo_z = Vec3f(0, 0, 0);
 	text_alpha = 0;
 	text_color = ColorA(1, 1, 1, 0);
-#pragma endregion
 }
+#pragma endregion
+
 
 #pragma region フォントの読み込みだけmainで実行してもらう
 void Title::setup(){
@@ -155,8 +157,18 @@ void Title::setup(){
 }
 #pragma endregion
 
+
+#pragma region キーを押した時の処理
+void Title::keyDown(KeyEvent event, unsigned int& scene){
+	if (event.getCode() == KeyEvent::KEY_g){
+		scene = GAME;
+	}
+}
+
+
 #pragma region 更新処理
 void Title::update(){
+	// タイトルのブロックを奥から手前へ移動させる(演出)
 	for (int i = 0; i < 52; i++){
 		if (rogo_z.z < 100){
 			rogo_z += Vec3f(0, 0.005f, 0.01f);
@@ -167,7 +179,7 @@ void Title::update(){
 	}
 
 
-
+	// 表示文字の透明度を変化
 	text_alpha += 0.05f;
 
 }
@@ -185,10 +197,11 @@ void Title::draw(){
 		gl::draw(string_cube[i].cube_mesh);	// ポリゴンを描画
 		gl::popModelView();  // ここまで-------------------------------------
 
+		// 文字の表示
 		gl::pushModelView(); // ここから-------------------------------------
 		gl::rotate(Vec3f(160, 0, 0));
 		gl::drawStringCentered(
-			"START PUSH [ENTER]",
+			"START PUSH [G] KEY",
 			Vec2f(0, 100), text_color + std::abs(std::sin(text_alpha)), font);
 		gl::popModelView();  // ここまで-------------------------------------
 

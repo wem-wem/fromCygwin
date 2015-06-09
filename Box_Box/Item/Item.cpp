@@ -97,6 +97,7 @@ Item::Item(){
 #pragma endregion
 
 	i_mesh.recalculateNormals();
+	Rand::randomize();
 
 
 	for (int i = 0; i < 10; i++){

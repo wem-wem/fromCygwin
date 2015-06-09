@@ -18,6 +18,8 @@ public:
 	FallCube* fallcube_ref;
 	Item* item_ref;
 
+	Font font;
+
 	// 自機操作の判定用
 	bool get_W, get_A, get_S, get_D, get_SPACE;
 	bool isjumping;
@@ -30,7 +32,8 @@ public:
 	bool isCollisionFallCube_D(); // fallcube の左面と player の右面との衝突判定
 	bool isCollisionFallCube_W(); // fallcube の手前面と player の奥の面との衝突判定
 	bool isCollisionFallCube_S(); // fallcube の奥の面と player の手前面との衝突判定
-	void isCollisionItem();
-	void update();
+	void isCollisionItem(unsigned int& score);
+	void setup();
+	void update(unsigned int& score);
 	void draw();
 };

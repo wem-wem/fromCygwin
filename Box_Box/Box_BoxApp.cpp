@@ -1,9 +1,14 @@
 #include "common.h"
+#include "Title/Title.h"
+
 #include "Player/Player.h"
 #include "Ground/Ground.h"
 #include "FallCube/FallCube.h"
 #include "Item/Item.h"
-#include "Title/Title.h"
+#include "GameUI/GameUI.h"
+
+#include "Result/Result.h"
+
 
 class Box_BoxApp : public AppNative {
 private:
@@ -14,21 +19,22 @@ private:
 	CameraPersp camera;
 
 	// クラスの呼び出し
+	Title title;
+
 	Player player;
 	Ground ground;
 	FallCube fallcube;
 	Item item;
-	Title title;
+	GameUI game_ui;
 
-	// シーン切り替え用
+	Result result;
+
+	// シーン切り替え用変数
 	unsigned int scene;
-	enum{
-		TITLE,
-		GAME,
-		RESULT
-	};
 
-	float rz;
+	// スコアを一時的に保存する変数
+	unsigned int onetime_score;
+	unsigned int time_count;
 
 public:
 	void setup();
@@ -71,33 +77,28 @@ void Box_BoxApp::setup()
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 
-	Rand::randomize();
-	scene = 0;
+
+	// 変数の初期化-------------------------------------
+	onetime_score = 0;
+	time_count = 0;
+
+
+	// シーン切り替え用変数-----------------------------------------
+	scene = TITLE;
+
+
+	// 他クラスのフォント読み込み-----------------------------------------
 	title.setup();
+	player.setup();
+	game_ui.setup();
+	result.setup();
 }
 
 void Box_BoxApp::keyDown(KeyEvent event)
 {
-#pragma region デバッグ機能(シーン切り替え)
-	if (event.getCode() == KeyEvent::KEY_t)
-	{
-		camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
-			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
-		scene = TITLE;
-		rz = 600.0f;
-	}
-
-	if (event.getCode() == KeyEvent::KEY_g)
-	{
-		scene = GAME;
-		camera.lookAt(Vec3f(0.0, 300.0, 300.0), // Y軸300, Z軸300の地点から
-			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
-	}
-#pragma endregion
-
-
 	switch (scene){
 	case TITLE:
+		title.keyDown(event, scene);
 		break;
 
 	case GAME:
@@ -105,6 +106,7 @@ void Box_BoxApp::keyDown(KeyEvent event)
 		break;
 
 	case RESULT:
+		result.keyDown(event, scene, time_count, onetime_score);
 		break;
 	}
 }
@@ -128,17 +130,35 @@ void Box_BoxApp::update()
 {
 	switch (scene){
 	case TITLE:
+		camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
+			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
+
 		title.update();
 		break;
 
 	case GAME:
+		camera.lookAt(Vec3f(0.0, 300.0, 300.0), // Y軸300, Z軸300の地点から
+			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
+
 		player.SetReference(&fallcube, &item);
-		player.update();
+		player.update(onetime_score);
 		fallcube.update();
 		item.update();
+		game_ui.update(onetime_score, scene);
+
+		// リザルトへの移行処理
+		time_count++;
+		if (time_count >= 5 * 60){
+			scene = RESULT;
+			player.get_A = player.get_D = player.get_S = player.get_W = player.get_SPACE = false;
+		}
 		break;
 
 	case RESULT:
+		camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
+			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
+
+		result.update(onetime_score, time_count);
 		break;
 	}
 }
@@ -166,9 +186,11 @@ void Box_BoxApp::draw()
 		player.draw();
 		fallcube.draw();
 		item.draw();
+		game_ui.draw();
 		break;
 
 	case RESULT:
+		result.draw();
 		break;
 	}
 

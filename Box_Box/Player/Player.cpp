@@ -93,6 +93,7 @@ Player::Player(){
 
 	p_mesh.recalculateNormals();
 
+	// 変数の初期化
 	pos = Vec3f(0, 15, 0);			// プレイヤーの初期位置
 	size = Vec3f(8.0f, 8.0f, 8.0f); // プレイヤーの大きさ
 	gravity = 0.0f;
@@ -103,6 +104,10 @@ Player::Player(){
 }
 #pragma endregion
 
+
+void Player::setup(){
+	font = Font(loadAsset("font/MyComSquare-Medium.otf"), 15);
+}
 
 #pragma region キーが押された時の判定
 void Player::keyDown(KeyEvent event){
@@ -274,7 +279,7 @@ bool Player::isCollisionFallCube_S(){
 
 
 #pragma region アイテムの取得判定
-void Player::isCollisionItem(){
+void Player::isCollisionItem(unsigned int& score){
 	for (unsigned int i = 0; i < item_ref->obj.size(); i++)
 	{
 		// アイテムの底辺よりも自機の上辺が高い時
@@ -290,6 +295,7 @@ void Player::isCollisionItem(){
 					pos.z - size.z <= item_ref->obj[i].pos.z)
 				{
 					item_ref->obj[i].get_flag = true;
+					score += 1;
 				}
 			}
 		}
@@ -299,9 +305,9 @@ void Player::isCollisionItem(){
 
 
 #pragma region 更新処理
-void Player::update(){
+void Player::update(unsigned int& score){
 	float ground_end = 92.0f;
-	isCollisionItem();
+	isCollisionItem(score);
 
 	if (!isCollisionFallCube_A()){
 		if (get_A){
