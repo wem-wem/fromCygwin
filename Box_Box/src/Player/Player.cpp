@@ -336,7 +336,8 @@ void Player::isCollisionItem(unsigned int& score, unsigned int& time, audio::Buf
 
 
 #pragma region 更新処理
-void Player::update(unsigned int& score, unsigned int& scene, audio::BufferPlayerNodeRef& ITEM_GET_SE){
+void Player::update(unsigned int& score, unsigned int& scene,
+					audio::BufferPlayerNodeRef& ITEM_GET_SE, audio::BufferPlayerNodeRef& DAMAGE_SE){
 	float ground_end = 92.0f;
 	isCollisionItem(score, game_ui_ref->_time, ITEM_GET_SE);
 
@@ -364,10 +365,12 @@ void Player::update(unsigned int& score, unsigned int& scene, audio::BufferPlaye
 		}
 	}
 
+	// 落ちてきたボックスとぶつかった場合
 	if (isCollisionFallCube_A() || isCollisionFallCube_D() ||
 		isCollisionFallCube_S() || isCollisionFallCube_W() ||
 		isCollisionFallCube_SPACE())
 	{
+		DAMAGE_SE->start();
 		scene = RESULT;
 
 	}

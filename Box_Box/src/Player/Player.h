@@ -37,6 +37,7 @@ public:
 	bool isCollisionFallCube_SPACE(); // fallcube ‚Ì‰œ‚Ì–Ê‚Æ player ‚Ìè‘O–Ê‚Æ‚ÌÕ“Ë”»’è
 	void isCollisionItem(unsigned int& score, unsigned int& time, audio::BufferPlayerNodeRef& ITEM_GET_SE);
 	void setup();
-	void update(unsigned int& score, unsigned int& scene, audio::BufferPlayerNodeRef& ITEM_GET_SE);
+	void update(unsigned int& score, unsigned int& scene,
+		audio::BufferPlayerNodeRef& ITEM_GET_SE, audio::BufferPlayerNodeRef& DAMAGE_SE);
 	void draw();
 };

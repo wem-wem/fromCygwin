@@ -23,12 +23,14 @@ private:
 	audio::BufferPlayerNodeRef RESULT_BGM;
 	audio::BufferPlayerNodeRef ITEM_GET_SE;
 	audio::BufferPlayerNodeRef JUMP_SE;
+	audio::BufferPlayerNodeRef DAMAGE_SE;
 
 	audio::GainNodeRef TITLE_BGM_gain;
 	audio::GainNodeRef SELECT_SE_gain;
 	audio::GainNodeRef RESULT_BGM_gain;
 	audio::GainNodeRef ITEM_GET_SE_gain;
 	audio::GainNodeRef JUMP_SE_gain;
+	audio::GainNodeRef DAMAGE_SE_gain;
 
 	// クラスの呼び出し
 	Title title;
@@ -113,6 +115,7 @@ void Box_BoxApp::setup()
 	setAudioPlayer(RESULT_BGM, RESULT_BGM_gain, "BGM/result_BGM.mp3");
 	setAudioPlayer(ITEM_GET_SE, ITEM_GET_SE_gain, "SE/se_maoudamashii_system24.mp3");
 	setAudioPlayer(JUMP_SE, JUMP_SE_gain, "SE/jump.mp3");
+	setAudioPlayer(DAMAGE_SE, DAMAGE_SE_gain, "SE/damage.mp3");
 #pragma endregion
 }
 
@@ -181,6 +184,7 @@ void Box_BoxApp::update()
 		TITLE_BGM_gain->setValue(0.3f);
 		ITEM_GET_SE_gain->setValue(0.5f);
 		JUMP_SE_gain->setValue(0.5f);
+		JUMP_SE_gain->setValue(0.5f);
 
 		// リザルトのBGMを停止
 		if (RESULT_BGM->isEnabled()){
@@ -196,7 +200,7 @@ void Box_BoxApp::update()
 			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
 
 		player.SetReference(&fallcube, &item, &game_ui);
-		player.update(onetime_score, scene, ITEM_GET_SE);
+		player.update(onetime_score, scene, ITEM_GET_SE, DAMAGE_SE);
 		fallcube.update();
 		item.update();
 		game_ui.update(onetime_score, scene, item, fallcube);
