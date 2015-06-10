@@ -87,7 +87,7 @@ void Box_BoxApp::setup()
 
 
 	// シーン切り替え用変数-----------------------------------------
-	scene = TITLE;
+	scene = RESULT;
 
 
 	// 他クラスのフォント読み込み-----------------------------------------
@@ -145,7 +145,7 @@ void Box_BoxApp::update()
 		camera.lookAt(Vec3f(0.0, 300.0, 300.0), // Y軸300, Z軸300の地点から
 			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
 
-		player.SetReference(&fallcube, &item);
+		player.SetReference(&fallcube, &item, &game_ui);
 		player.update(onetime_score, scene);
 		fallcube.update();
 		item.update();

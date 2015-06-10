@@ -18,7 +18,7 @@ public:
 
 	FallCube* fallcube_ref;
 	Item* item_ref;
-	GameUI game_ui;
+	GameUI* game_ui_ref;
 
 	Font font;
 
@@ -29,7 +29,7 @@ public:
 	~Player(){};
 	void keyDown(KeyEvent event);
 	void keyUp(KeyEvent event);
-	void SetReference(FallCube* fc_ref, Item* i_ref);
+	void SetReference(FallCube* fc_ref, Item* i_ref, GameUI* ui_ref);
 	bool isCollisionFallCube_A(); // fallcube ‚Ì‰E–Ê‚Æ player ‚Ì¶–Ê‚Æ‚ÌÕ“Ë”»’è
 	bool isCollisionFallCube_D(); // fallcube ‚Ì¶–Ê‚Æ player ‚Ì‰E–Ê‚Æ‚ÌÕ“Ë”»’è
 	bool isCollisionFallCube_W(); // fallcube ‚Ìè‘O–Ê‚Æ player ‚Ì‰œ‚Ì–Ê‚Æ‚ÌÕ“Ë”»’è

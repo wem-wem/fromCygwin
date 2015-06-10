@@ -13,6 +13,12 @@ private:
 
 	unsigned int r_score;
 	unsigned int time;
+	float RESULT_rx;
+	float SCORE_rx;
+	float text_rx;
+
+	unsigned int score_direct; // スコア表示の演出用
+	unsigned int time_direct;  // 合計時間表示の演出用
 
 public:
 	Result();

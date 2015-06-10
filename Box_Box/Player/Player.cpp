@@ -163,9 +163,10 @@ void Player::keyUp(KeyEvent event){
 
 
 #pragma region 各クラスのポインタを取得
-void Player::SetReference(FallCube* fc_ref, Item* i_ref){
+void Player::SetReference(FallCube* fc_ref, Item* i_ref, GameUI* ui_ref){
 	fallcube_ref = fc_ref;
 	item_ref = i_ref;
+	game_ui_ref = ui_ref;
 }
 #pragma endregion
 
@@ -323,7 +324,7 @@ void Player::isCollisionItem(unsigned int& score, unsigned int& time){
 				{
 					item_ref->obj[i].get_flag = true;
 					score += 1;
-					time += 60;
+					time += 30;
 				}
 			}
 		}
@@ -335,7 +336,7 @@ void Player::isCollisionItem(unsigned int& score, unsigned int& time){
 #pragma region 更新処理
 void Player::update(unsigned int& score, unsigned int& scene){
 	float ground_end = 92.0f;
-	isCollisionItem(score, game_ui._time);
+	isCollisionItem(score, game_ui_ref->_time);
 
 	if (get_A){
 		if (pos.x > -ground_end){
