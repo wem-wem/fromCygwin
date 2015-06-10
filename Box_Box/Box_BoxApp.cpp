@@ -44,6 +44,7 @@ public:
 	void draw();
 };
 
+
 void Box_BoxApp::setup()
 {
 	// ライトの準備--------------------------------------------------------
@@ -77,6 +78,8 @@ void Box_BoxApp::setup()
 	gl::enableDepthRead();
 	gl::enableDepthWrite();
 
+	// 文字の周りの黒い枠が消えたよ！
+	gl::enableAlphaBlending();
 
 	// 変数の初期化-------------------------------------
 	onetime_score = 0;
@@ -94,6 +97,7 @@ void Box_BoxApp::setup()
 	result.setup();
 }
 
+
 void Box_BoxApp::keyDown(KeyEvent event)
 {
 	switch (scene){
@@ -110,6 +114,7 @@ void Box_BoxApp::keyDown(KeyEvent event)
 		break;
 	}
 }
+
 
 void Box_BoxApp::keyUp(KeyEvent event)
 {
@@ -141,32 +146,57 @@ void Box_BoxApp::update()
 			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
 
 		player.SetReference(&fallcube, &item);
-		player.update(onetime_score);
+		player.update(onetime_score, scene);
 		fallcube.update();
 		item.update();
-		game_ui.update(onetime_score, scene);
+		game_ui.update(onetime_score, scene, item, fallcube);
 
-		// リザルトへの移行処理
+		// 【TOTAL TIME】測定用のタイムを加算
 		time_count++;
-		if (time_count >= 5 * 60){
-			scene = RESULT;
-			player.get_A = player.get_D = player.get_S = player.get_W = player.get_SPACE = false;
-		}
 		break;
 
 	case RESULT:
 		camera.lookAt(Vec3f(0.0, 300.0, 600.0), // Y軸300, Z軸300の地点から
 			Vec3f(0.0, 0.0, 0.0));	// (0, 0, 0)の地点を見るカメラ
 
+		player.get_A = player.get_D = player.get_S = player.get_W = player.get_SPACE = false;
+		
+
+#pragma region オブジェクトの再配置
+		// プレイヤーの変数初期化
+		player.pos = Vec3f(0, 15, 0);
+		player.gravity = 0;
+		player.shadow_size = 8.0f;
+
+		// 落下キューブの初期化
+		for (unsigned int i = 0; i < fallcube.cube.size(); i++)
+		{
+			fallcube.cube[i].pos =
+				Vec3f(randFloat(-90.0f, 90.0f), randFloat(300.0f, 600.0f), randFloat(-90.0f, 90.0f));
+
+			fallcube.cube[i].shadow_width = 0.0f;
+		}
+
+		// アイテムの初期化
+		for (unsigned int i = 0; i < item.obj.size(); i++)
+		{
+			item.obj[i].pos =
+				Vec3f(randFloat(-90.0f, 90.0f), randFloat(20.0f, 50.0f), randFloat(-90.0f, 90.0f));
+		}
+
+		game_ui._time = 20 * 60;
+
+#pragma endregion
 		result.update(onetime_score, time_count);
 		break;
 	}
 }
 
+
 void Box_BoxApp::draw()
 {
 	// clear out the window with black
-	gl::clear(Color(0.2f, 0.2f, 0.2f));
+	gl::clear(Color(0.4f, 0.4f, 0.4f));
 
 	// カメラの状態から行列を作成
 	// 視点座標変換用と正規化デバイス座標変換用の２つを用意する

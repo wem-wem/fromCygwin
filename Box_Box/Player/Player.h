@@ -2,6 +2,7 @@
 #include "../common.h"
 #include "../FallCube/FallCube.h"
 #include "../Item/Item.h"
+#include "../GameUI/GameUI.h"
 
 class Player{
 public:
@@ -17,6 +18,7 @@ public:
 
 	FallCube* fallcube_ref;
 	Item* item_ref;
+	GameUI game_ui;
 
 	Font font;
 
@@ -32,8 +34,9 @@ public:
 	bool isCollisionFallCube_D(); // fallcube の左面と player の右面との衝突判定
 	bool isCollisionFallCube_W(); // fallcube の手前面と player の奥の面との衝突判定
 	bool isCollisionFallCube_S(); // fallcube の奥の面と player の手前面との衝突判定
-	void isCollisionItem(unsigned int& score);
+	bool isCollisionFallCube_SPACE(); // fallcube の奥の面と player の手前面との衝突判定
+	void isCollisionItem(unsigned int& score, unsigned int& time);
 	void setup();
-	void update(unsigned int& score);
+	void update(unsigned int& score, unsigned int& scene);
 	void draw();
 };

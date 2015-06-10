@@ -1,5 +1,8 @@
 #include "Result.h"
-Result::Result(){}
+Result::Result(){
+	r_score = 0;
+	time = 0;
+}
 
 #pragma region フォントの読み込み用セットアップ
 void Result::setup(){
@@ -13,25 +16,23 @@ void Result::setup(){
 #pragma region キーを押された時の処理
 void Result::keyDown(KeyEvent event, unsigned int& scene, unsigned int& time_count, unsigned int& score){
 	if (event.getCode() == KeyEvent::KEY_g){
-		scene = GAME;
-		time_count = 0;
 		score = 0;
+		time_count = 0;
+		scene = GAME;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_t){
-		scene = TITLE;
-		time_count = 0;
 		score = 0;
+		time_count = 0;
+		scene = TITLE;
 	}
 }
-
+#pragma endregion
 
 #pragma region 更新処理
 void Result::update(unsigned int& score, unsigned int& time_count){
 	r_score = score;
 	time = time_count / 60;
-
-
 }
 #pragma endregion
 
@@ -46,6 +47,7 @@ void Result::draw(){
 		Vec2f(0, -170), Color(1, 1, 1), RESULT_font);
 	gl::popModelView();  // ここまで-------------------------------------
 
+
 	// スコアの表示
 	gl::pushModelView(); // ここから-------------------------------------
 	gl::rotate(Vec3f(160, 0, 0));
@@ -53,6 +55,7 @@ void Result::draw(){
 		"S C O R E : " + std::to_string(r_score),
 		Vec2f(0, -80), Color(1, 1, 1), SCORE_font);
 	gl::popModelView();  // ここまで-------------------------------------
+
 
 	// 合計プレイ時間の表示
 	gl::pushModelView(); // ここから-------------------------------------

@@ -114,7 +114,7 @@ void FallCube::update(){
 		if (CUBE.pos.y > 15.0f){
 			CUBE.pos.y -= gravity;
 		}
-		// ground ‚É’…‚¢‚½‚ç’â~
+		// ground ‚É’…‚¢‚½‚ç•Ê‚ÌêŠ‚ÉÄ”z’u
 		else{
 			CUBE.pos = Vec3f(randFloat(-90.0f, 90.0f), randFloat(300.0f, 600.0f), randFloat(-90.0f, 90.0f));
 		}

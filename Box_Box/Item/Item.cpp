@@ -1,14 +1,13 @@
 #include "Item.h"
 
 Item::Item(){
+#pragma region 通常アイテム
 #pragma region 頂点座標
 	// 立方体の頂点座標を指定--------------------------------------------------------
 	Vec3f vertices[] = {
-		// 手前の面
 		{ -1, -1, -1 }, { 1, 1, -1 }, { 1, -1, -1 },
 		{ -1, -1, -1 }, { -1, 1, -1 }, { 1, 1, -1 },
 
-		// 上の面
 		{ -1, 1, -1 }, { -1, 1, 1 }, { 1, 1, 1 },
 		{ -1, 1, -1 }, { 1, 1, 1 }, { 1, 1, -1 },
 
@@ -95,10 +94,10 @@ Item::Item(){
 	};
 	shadow_mesh.appendIndices(&shadow_indices[0], sizeof(shadow_indices) / sizeof(shadow_indices[0]));
 #pragma endregion
+#pragma endregion
 
 	i_mesh.recalculateNormals();
 	Rand::randomize();
-
 
 	for (int i = 0; i < 10; i++){
 		obj.push_back({ i_mesh, shadow_mesh, Vec3f(randFloat(-90.0f, 90.0f), randFloat(20.0f, 50.0f), randFloat(-90.0f, 90.0f)), Vec3f(5.0f, 5.0f, 5.0f), 5.0f, false });

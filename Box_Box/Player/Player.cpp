@@ -278,8 +278,35 @@ bool Player::isCollisionFallCube_S(){
 #pragma endregion
 
 
+#pragma region 自機の底面の面の当たり判定
+bool Player::isCollisionFallCube_SPACE(){
+	for (unsigned int i = 0; i < fallcube_ref->cube.size(); i++){
+		// fallcube の下辺との当たり判定
+		if (fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y < pos.y + size.y &&
+			fallcube_ref->cube[i].pos.y - fallcube_ref->cube[i].size.y - gravity > pos.y + size.y)
+		{
+			// fallcube の上面との当たり判定
+			if (fallcube_ref->cube[i].pos.x + fallcube_ref->cube[i].size.x > pos.x - size.x &&
+				fallcube_ref->cube[i].pos.x - fallcube_ref->cube[i].size.x < pos.x + size.x &&
+				fallcube_ref->cube[i].pos.z + fallcube_ref->cube[i].size.z + move_speed / 2 > pos.z - size.z &&
+				fallcube_ref->cube[i].pos.z - fallcube_ref->cube[i].size.z - move_speed / 2 < pos.z + size.z)
+			{
+				return true;
+			}
+
+			else
+			{
+				return false;
+			}
+		}
+	}
+	return false;
+}
+#pragma endregion
+
+
 #pragma region アイテムの取得判定
-void Player::isCollisionItem(unsigned int& score){
+void Player::isCollisionItem(unsigned int& score, unsigned int& time){
 	for (unsigned int i = 0; i < item_ref->obj.size(); i++)
 	{
 		// アイテムの底辺よりも自機の上辺が高い時
@@ -296,6 +323,7 @@ void Player::isCollisionItem(unsigned int& score){
 				{
 					item_ref->obj[i].get_flag = true;
 					score += 1;
+					time += 60;
 				}
 			}
 		}
@@ -305,41 +333,42 @@ void Player::isCollisionItem(unsigned int& score){
 
 
 #pragma region 更新処理
-void Player::update(unsigned int& score){
+void Player::update(unsigned int& score, unsigned int& scene){
 	float ground_end = 92.0f;
-	isCollisionItem(score);
+	isCollisionItem(score, game_ui._time);
 
-	if (!isCollisionFallCube_A()){
-		if (get_A){
-			if (pos.x > -ground_end){
-				pos.x += -move_speed; // 左移動
-			}
+	if (get_A){
+		if (pos.x > -ground_end){
+			pos.x += -move_speed; // 左移動
 		}
 	}
 
-	if (!isCollisionFallCube_D()){
-		if (get_D){
-			if (pos.x < ground_end){
-				pos.x += move_speed; // 右移動
-			}
+	if (get_D){
+		if (pos.x < ground_end){
+			pos.x += move_speed; // 右移動
 		}
 	}
 
-	if (!isCollisionFallCube_W()){
-		if (get_W){
-			if (pos.z > -ground_end){
-				pos.z += -move_speed; // 奥へ移動
-			}
+	if (get_W){
+		if (pos.z > -ground_end){
+			pos.z += -move_speed; // 奥へ移動
 		}
 	}
 
-	if (!isCollisionFallCube_S()){
-		if (get_S){
-			if (pos.z < ground_end){
-				pos.z += move_speed; // 手前へ移動
-			}
+	if (get_S){
+		if (pos.z < ground_end){
+			pos.z += move_speed; // 手前へ移動
 		}
 	}
+
+	if (isCollisionFallCube_A() || isCollisionFallCube_D() ||
+		isCollisionFallCube_S() || isCollisionFallCube_W() ||
+		isCollisionFallCube_SPACE())
+	{
+		scene = RESULT;
+
+	}
+
 
 	// ジャンプ時の挙動
 	if (get_SPACE){

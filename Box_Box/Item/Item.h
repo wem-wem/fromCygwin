@@ -12,10 +12,13 @@ struct Item_obj{
 	bool get_flag;
 };
 
+
 class Item{
 public:
+	// 通常アイテム用メッシュ
 	TriMesh i_mesh;
 	TriMesh shadow_mesh; // 影用のメッシュ情報
+
 	std::vector<Item_obj> obj;
 	Vec3f rotate;
 
