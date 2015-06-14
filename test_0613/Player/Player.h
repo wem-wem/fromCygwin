@@ -26,5 +26,4 @@ public:
 	void keyUp(KeyEvent event);
 	void update();
 	void draw();
-
 };

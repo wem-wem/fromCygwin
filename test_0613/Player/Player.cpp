@@ -30,10 +30,6 @@ void Player::keyDown(KeyEvent event){
 	if (event.getCode() == KeyEvent::KEY_d){
 		_get_d = true;
 	}
-
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		_get_space = true;
-	}
 }
 
 
@@ -52,10 +48,6 @@ void Player::keyUp(KeyEvent event){
 
 	if (event.getCode() == KeyEvent::KEY_d){
 		_get_d = false;
-	}
-
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		_get_space = false;
 	}
 }
 
