@@ -1,75 +1,93 @@
 #include "Player.h"
 
 Player::Player(){
-	_rx = 0; 
-	_ry = 0;
-	_speed = Vec2f(1, 1);
-	_pos = Vec2f(0, 0);
-	_get_w = _get_a = _get_s = _get_d = _get_space = false;
+	rx = 0; 
+	ry = 0;
+	speed = Vec2f(1, 1);
+	pos = Vec2f(0, 0);
+	get_w = get_a = get_s = get_d = get_space = false;
+
+	// 画像の読み込み
+	player_image = loadImage(loadAsset("player.png"));
 };
 
 
-void Player::setup(){
-	player_image = loadImage(loadAsset("player.png"));
-}
-
-
 void Player::keyDown(KeyEvent event){
+#pragma region 移動キー
 	if (event.getCode() == KeyEvent::KEY_w){
-		_get_w = true;
+		get_w = true;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_a){
-		_get_a = true;
+		get_a = true;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_s){
-		_get_s = true;
+		get_s = true;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_d){
-		_get_d = true;
+		get_d = true;
+	}
+#pragma endregion
+
+	// ショット用キー
+	if (event.getCode() == KeyEvent::KEY_SPACE){
+		getKey_space = true;
 	}
 }
 
 
 void Player::keyUp(KeyEvent event){
+#pragma region 移動キー
 	if (event.getCode() == KeyEvent::KEY_w){
-		_get_w = false;
+		get_w = false;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_a){
-		_get_a = false;
+		get_a = false;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_s){
-		_get_s = false;
+		get_s = false;
 	}
 
 	if (event.getCode() == KeyEvent::KEY_d){
-		_get_d = false;
+		get_d = false;
+	}
+#pragma endregion
+
+	// ショット用キー
+	if (event.getCode() == KeyEvent::KEY_SPACE){
+		getKey_space = false;
+	}
+}
+
+void Player::CreateBullet(){
+	if (getKey_space){
+		BulletSP newBullet = BulletSP(new Bullet_obj);
 	}
 }
 
 
 void Player::update(){
 
-	console() << _pos.y << std::endl;
+	console() << pos.y << std::endl;
 
-	if (_get_w){
-		_pos.y -= _speed.y;
+	if (get_w){
+		pos.y -= speed.y;
 	}
 
-	if (_get_a){
-		_pos.x -= _speed.x;
+	if (get_a){
+		pos.x -= speed.x;
 	}
 
-	if (_get_s){
-		_pos.y += _speed.y;
+	if (get_s){
+		pos.y += speed.y;
 	}
 
-	if (_get_d){
-		_pos.x += _speed.x;
+	if (get_d){
+		pos.x += speed.x;
 	}
 }
 
@@ -78,7 +96,7 @@ void Player::draw(){
 	player_image.bind();
 
 	gl::pushModelView();
-	gl::translate(Vec3f(_pos, 0));
+	gl::translate(Vec3f(pos, 0));
 	gl::draw(player_image);
 	gl::popModelView();
 

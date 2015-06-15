@@ -5,14 +5,15 @@ typedef std::shared_ptr<Object> ObjectSP;
 
 class Object{
 public:
-	float _rx, _ry;
-	float _speed;
-	Vec2f _pos;
+	float rx, ry;
+	float speed;
+	Vec2f pos;
+
+	gl::Texture image;
 	
 	Object();
 	~Object(){};
 
-	virtual void setup() = 0;
 	virtual void update() = 0;
 	virtual void draw() = 0;
 };

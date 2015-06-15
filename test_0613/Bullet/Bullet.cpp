@@ -1,46 +1,40 @@
 #include "Bullet.h"
 
-Bullet::Bullet(){}
-
-void Bullet::setup(){
+Bullet::Bullet(){
+	// 画像の読み込み
 	bullet_image = loadImage(loadAsset("shot.png"));
 }
 
-
-void Bullet::keyDown(KeyEvent event){
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		_getKey_space = true;
-	}
-}
-
-
-void Bullet::keyUp(KeyEvent event){
-	if (event.getCode() == KeyEvent::KEY_SPACE){
-		_getKey_space = false;
-	}
-}
-
-
+// 更新処理(必要なもの書き出し中)
 void Bullet::update(){ 
-	// 画面外に出たら弾を消す
-	for (auto itr : obj){
-		if (itr.pos.x > getWindowWidth() || itr.pos.x < 0){
-			if (itr.pos.y > getWindowHeight() || itr.pos.y < 0){
-				obj.erase;
-			}
-		}
-	}
+	//// スペースキーが押されたら弾を作る
+	//if (getKey_space){
+	//	PlayerSP player = PlayerSP(new Player());
+	//	obj.push_back({ player->pos, Vec2f(0, 1), true });
+	//}
+
+	//// 弾の pos を speed の分だけ移動させる
+	//for (auto& itr : obj){
+	//	pos += speed;
+	//}
+
+	//// 画面外に出たら弾を消す
+	//for (auto itr : obj){
+	//	if (itr.pos.x > getWindowWidth() || itr.pos.x < 0){
+	//		if (itr.pos.y > getWindowHeight() || itr.pos.y < 0){
+	//			obj.erase;
+	//		}
+	//	}
+	//}
 }
 
 
 void Bullet::draw(){
-	if (_getKey_space){
-		PlayerSP player = PlayerSP(new Player());
-		obj.push_back({ player->_pos, Vec2f(0, 1), true });
-	}
-
-	gl::pushModelView();
-	gl::translate(Vec3f(_pos + _speed, 0));
-	gl::draw(bullet_image);
-	gl::popModelView();
+	// 弾の数だけ表示させる
+//	for (auto& itr : obj ){
+		gl::pushModelView();
+		gl::translate(Vec3f(pos + speed, 0));
+		gl::draw(bullet_image);
+		gl::popModelView();
+//	}
 }
