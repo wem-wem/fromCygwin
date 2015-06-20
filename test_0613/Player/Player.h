@@ -1,14 +1,13 @@
 #include "../common.h" 
-#include "../Object/Object.h"
 #include "../Bullet/Bullet.h"
 
 
 class Player;
 typedef std::shared_ptr<Player> PlayerSP;
 
-std::list<Bullet_obj>b_obj;
+std::list<Bullet>b_obj;
 
-class Player : public Object{
+class Player{
 private:
 	float rx, ry;
 	Vec2f speed;
@@ -24,6 +23,7 @@ public:
 	Player();
 	~Player(){};
 
+	Vec2f pos_getter(){ return pos; };
 	void keyDown(KeyEvent event);
 	void keyUp(KeyEvent event);
 	void CreateBullet();

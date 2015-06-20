@@ -8,23 +8,11 @@ private:
 	BulletSP bullet = BulletSP(new Bullet());
 
 public:
-	void setup();
-	void mouseDown( MouseEvent event );	
 	void keyDown(KeyEvent event);
 	void keyUp(KeyEvent event);
 	void update();
 	void draw();
 };
-
-void test6_13App::setup()
-{
-	player->setup();
-	bullet->setup();
-}
-
-void test6_13App::mouseDown( MouseEvent event )
-{
-}
 
 
 void test6_13App::keyDown(KeyEvent event){

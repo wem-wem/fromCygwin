@@ -30,11 +30,8 @@ void Bullet::update(){
 
 
 void Bullet::draw(){
-	// ’e‚Ì”‚¾‚¯•\¦‚³‚¹‚é
-//	for (auto& itr : obj ){
 		gl::pushModelView();
-		gl::translate(Vec3f(pos + speed, 0));
+		gl::translate(Vec3f(pos += speed, 0));
 		gl::draw(bullet_image);
 		gl::popModelView();
-//	}
 }
