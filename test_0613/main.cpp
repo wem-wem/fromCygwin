@@ -1,18 +1,19 @@
 ﻿#include "common.h"
-#include "Player/Player.h"
+#include "GameManager/GameManager.h"
 
 int main() {
 	AppEnv env(Window::WIDTH, Window::HEIGHT, false, false);
 
-	PlayerSP player = PlayerSP(new Player);
+	GameManagerSP game = GameManagerSP(new GameManager);
 
 	while (env.isOpen()) {
 
-		player->update(env);
+		game->update(env);
+
 
 		env.setupDraw();
 
-		player->draw();
+		game->draw();
 
 		env.update();
 	}

@@ -9,11 +9,20 @@ protected:
 	Vec2f pos_;
 	Vec2f speed_;
 	Vec2f view_size_;
-	float direction_;
+	float draw_direction_;	// 描画の向きを指定
 	Texture tex_;
 
 	Vec2f start_tex_;
 	Vec2f tex_size_;
+
+	// 自機とショットの向きの判定に
+	int obj_direction;
+	enum direction_num{
+		UP,
+		DOWN,
+		LEFT,
+		RIGHT,
+	};
 
 public:
 	Object();
