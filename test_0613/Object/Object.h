@@ -25,9 +25,12 @@ protected:
 	};
 
 public:
-	Object();
+	Object() = default;
 	virtual ~Object(){};	// デストラクタの理解が乏しい…
 
-	void update();
-	void draw();
+	const Vec2f& getPos(){ return pos_; };
+	int getDirection(){ return obj_direction; };
+
+	virtual void update(){};
+	virtual void draw(){};
 };

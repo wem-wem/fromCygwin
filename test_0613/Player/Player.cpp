@@ -19,32 +19,34 @@ bool Player::isPushKey_SPACE(AppEnv& env){
 	return env.isPushKey(GLFW_KEY_SPACE);
 }
 
+
 // update()‚Å”»’è‚Æˆ—‚ğ‚µ‚Ä‚¢‚é‚Ì‚Å•ª‚¯‚é‚×‚«‚Å‚·‚æ‚Ëc–ÒÈ
 void Player::update(AppEnv& env){
-	if (env.isPushKey('W') || env.isPressKey('W')){
+	if (env.isPressKey('W')){
 		pos_.y() += speed_.y();
 		draw_direction_ = PI * 2;
 		obj_direction = UP;
 	}
 
-	if (env.isPushKey('S') || env.isPressKey('S')){
+	if (env.isPressKey('S')){
 		pos_.y() -= speed_.y();
 		draw_direction_ = PI;
 		obj_direction = DOWN;
 	}
 
-	if (env.isPushKey('D') || env.isPressKey('D')){
+	if (env.isPressKey('D')){
 		pos_.x() += speed_.x();
 		draw_direction_ = (PI / 2) * 3;
 		obj_direction = RIGHT;
 	}
 
-	if (env.isPushKey('A') || env.isPressKey('A')){
+	if (env.isPressKey('A')){
 		pos_.x() -= speed_.x();
 		draw_direction_ = PI / 2;
 		obj_direction = LEFT;
 	}
 }
+
 
 void Player::draw(){
 	drawTextureBox(pos_.x(), pos_.y(),

@@ -39,7 +39,7 @@ void GameManager::draw(){
 	// ƒvƒŒƒCƒ„[‚Æ’e‚Ì•`‰æˆ—‚ğ‚Ü‚Æ‚ß‚Ä‘‚­
 	player->draw();
 
-	// update() ‚Æ“¯‚¶‚æ‚¤‚ÉA’e‚Ìæ“ªƒAƒhƒŒƒX‚©‚ç‡‚É•`‰æˆ—
+	// update() ‚Æ“¯‚¶‚æ‚¤‚ÉA’e‚Ìæ“ª—v‘f‚©‚ç‡‚É•`‰æˆ—
 	for (auto& shots : shot_obj){
 		shots->draw();
 	}
