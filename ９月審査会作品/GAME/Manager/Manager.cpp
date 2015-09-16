@@ -3,19 +3,23 @@
 Manager::Manager(){
 	shot_timer_ = -1;
 	delete_line = -10.0f;
+
+	enemy_timer_ = -1;
+	enemy_delete_line_ = 1.f;
 }
+
 
 void Manager::setup()
 {
 	player->setup();
-	enemy->setup();
 }
+
 
 void Manager::update(Vec2i& direction, bool& istouch)
 {
 	player->update(direction);
-	enemy->update();
 
+#pragma region ’e‚Ì”­ŽË‚ÆÁ–Å
 	// ‰æ–Ê‚ðƒ^ƒbƒ`‚µ‚Ä‚P•b–ˆ‚É’e‚ð”­ŽË‚·‚é
 	if (istouch)
 	{
@@ -47,16 +51,118 @@ void Manager::update(Vec2i& direction, bool& istouch)
 	while (bullet_it != bullet_obj.end())
 	{
 		(*bullet_it)->update();
-
 		// ˆê’è‹——£i‚ñ‚¾‚ç’e‚ðÁ‚·ˆ—
 		if ((*bullet_it)->getPos().z < delete_line)
 		{
-			bullet_it = bullet_obj.erase(bullet_it++);
+			bullet_it = bullet_obj.erase(bullet_it);
 		}
 
-		// ŽŸ‚Ì’e‚ÌƒAƒhƒŒƒX‚ÖˆÚ“®
-		bullet_it++;
+		// “G‚É“–‚½‚Á‚½ê‡‚ÌÁ–Å”»’è
+		else if((*bullet_it)->getPos().x < 0.f)
+		{
+		
+		}
+
+		else
+		{	
+			// ŽŸ‚Ì’e‚ÌƒAƒhƒŒƒX‚ÖˆÚ“®
+			bullet_it++;
+		}
 	}
+#pragma endregion
+
+#pragma region “G‚Ì¶¬‚ÆÁ–Å
+	enemy_timer_++;
+	if (enemy_timer_ == 0)
+	{
+		enemy_obj.push_back(EnemySP(new Enemy));
+	}
+	else if (enemy_timer_ >= 150)
+	{
+		enemy_timer_ = -1;
+	}
+
+	auto enemy_it = enemy_obj.begin();
+
+	// ƒŠƒXƒg‚Ìæ“ª‚©‚çÅŒã‚Ü‚Å’e‚ðˆ—‚µ‚Ä‚¢‚­
+	while (enemy_it != enemy_obj.end())
+	{
+		(*enemy_it)->update();
+
+		// ˆê’è‹——£i‚ñ‚¾‚ç“G‚ðÁ‚·ˆ—
+		if ((*enemy_it)->getPos().z > enemy_delete_line_)
+		{
+			enemy_it = enemy_obj.erase(enemy_it);
+		}
+
+		else
+		{
+			// ŽŸ‚Ì’e‚ÌƒAƒhƒŒƒX‚ÖˆÚ“®
+			enemy_it++;
+		}
+	}
+#pragma endregion
+
+
+	//// Ž¸”s‚Pciterator‚ð‰ñ‚µ‚Ä‚È‚¢‚Ì‚Å“–‘R‚Å‚·‚ªA‹N“®’¼Œã‚ÉƒGƒ‰[‚Å’âŽ~
+	//if ((*bullet_it)->getPos().x < (*enemy_it)->getPos().x + (*enemy_it)->getSize().x &&
+	//	(*bullet_it)->getPos().x > (*enemy_it)->getPos().x - (*enemy_it)->getSize().x)
+	//{
+	//	bullet_it = bullet_obj.erase(bullet_it);
+	//	enemy_it = enemy_obj.erase(enemy_it);
+	//}
+	//else
+	//{
+	//	bullet_it++;
+	//	enemy_it++;
+	//}
+
+
+	//// Ž¸”s‚Qcã‚Ì•ÊX‚É‘‚¢‚Ä‚¢‚½ˆ—‚ð‚Ü‚Æ‚ß‚ÄA’†‚Åˆ—‚µ‚æ‚¤‚Æ‚µ‚Ä‚Ý‚½Œ‹‰Ê‘åŽ¸”s
+	////@@@@‰æ–Ê‚ª•\Ž¦‚³‚ê‚é‚àƒtƒŠ[ƒY
+	//for (auto bullet_it = bullet_obj.begin(); bullet_it != bullet_obj.end();)
+	//{
+	//	for (auto enemy_it = enemy_obj.begin(); enemy_it != enemy_obj.end();)
+	//	{
+	//		(*bullet_it)->update();
+	//		// ˆê’è‹——£i‚ñ‚¾‚ç’e‚ðÁ‚·ˆ—
+	//		if ((*bullet_it)->getPos().z < delete_line)
+	//		{
+	//			bullet_it = bullet_obj.erase(bullet_it);
+	//		}
+	//		else
+	//		{
+	//			// ŽŸ‚Ì’e‚ÌƒAƒhƒŒƒX‚ÖˆÚ“®
+	//			bullet_it++;
+	//		}
+
+
+	//		(*enemy_it)->update();
+	//		// ˆê’è‹——£i‚ñ‚¾‚ç“G‚ðÁ‚·ˆ—
+	//		if ((*enemy_it)->getPos().z > enemy_delete_line_)
+	//		{
+	//			enemy_it = enemy_obj.erase(enemy_it);
+	//		}
+	//		else
+	//		{
+	//			// ŽŸ‚Ì’e‚ÌƒAƒhƒŒƒX‚ÖˆÚ“®
+	//			enemy_it++;
+	//		}
+
+	//		// ”»’è
+	//		if ((*bullet_it)->getPos().x < (*enemy_it)->getPos().x + (*enemy_it)->getSize().x &&
+	//			(*bullet_it)->getPos().x > (*enemy_it)->getPos().x - (*enemy_it)->getSize().x)
+	//		{
+	//			bullet_it = bullet_obj.erase(bullet_it);
+	//			enemy_it = enemy_obj.erase(enemy_it);
+	//		}
+	//		else
+	//		{
+	//			bullet_it++;
+	//			enemy_it++;
+	//		}
+	//	}
+	//}
 }
 
 
@@ -64,7 +170,11 @@ void Manager::update(Vec2i& direction, bool& istouch)
 void Manager::draw()
 {
 	player->draw();
-	enemy->draw();
+
+	for (auto& enemys : enemy_obj)
+	{
+		enemys->draw();
+	}
 
 	for (auto& bullets : bullet_obj)
 	{

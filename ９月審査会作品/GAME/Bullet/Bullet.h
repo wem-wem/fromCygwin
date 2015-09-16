@@ -8,6 +8,7 @@ typedef std::shared_ptr<Bullet> BulletSP;
 // ’e‚P”­•ª‚Ìˆ—‚É•K—v‚È•Ï”EŠÖ”
 class Bullet : public Object{
 private:
+	bool life;
 	ObjLoader* obj;
 	TriMesh mesh;
 

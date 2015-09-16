@@ -3,6 +3,8 @@
 Bullet::Bullet(Vec3f player_pos){
 	pos_ = player_pos;
 	speed_ = Vec3f(0, 0, -0.1f);
+	life = true;
+	setup();
 }
 
 void Bullet::setup()

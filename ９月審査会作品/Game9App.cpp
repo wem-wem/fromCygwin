@@ -96,6 +96,8 @@ public:
 
 void Game9App::setup()
 {
+	Rand::randomize();
+
 	g_camera->setup();
 	g_manager->setup();
 

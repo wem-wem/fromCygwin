@@ -11,16 +11,18 @@ typedef std::shared_ptr<Manager> ManagerSP;
 class Manager{
 private:
 	PlayerSP player = PlayerSP(new Player);
-	EnemySP enemy = EnemySP(new Enemy);
 
-	// 複数の弾を処理する為にリストで管理する
+	// 複数の敵と弾を処理する為にリストで管理する
+	std::list<EnemySP> enemy_obj;
 	std::list<BulletSP> bullet_obj;
 
 	// 弾が一定間隔で発射されるようにタイマーをセット
 	int shot_timer_;
-
 	// 弾を描画する距離を制限する
 	float delete_line;
+
+	int enemy_timer_;
+	float enemy_delete_line_;
 
 public:
 	Manager();
