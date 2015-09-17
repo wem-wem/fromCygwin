@@ -19,6 +19,7 @@ private:
 	ObjLoader* obj;
 	TriMesh mesh;
 	Vec2f size;
+	bool  is_dead;
 
 	// ƒxƒWƒF‹Èü‚Å“G‚ğ“®‚©‚µ‚Ä‚İ‚é
 	float g_t;
@@ -29,11 +30,13 @@ public:
 	Enemy();
 
 	Vec3f WsbVec3BezierSpline(Vec3f*, Vec3f*, Vec3f*, Vec3f*, float);
-
-	Vec2f getSize(){ return size; }
-	Vec3f getPos(){ return pos_; }
+	Vec2f& getSize(){ return size; }
 
 	virtual void setup();
 	virtual void update();
 	virtual void draw();
+
+	// ‚±‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚½‚ç€–Sˆµ‚¢‚Æ‚·‚é
+	void hit() { this->is_dead = true; }
+	bool isDead() { return is_dead; }
 };

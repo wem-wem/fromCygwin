@@ -3,8 +3,9 @@
 Enemy::Enemy()
 {
 	speed_ = Vec3f(0.002f, 0.002f, 0.002f);
-	size = Vec2f(2.f, 2.f);
+	size = Vec2f(1.f, 1.f);
 	g_t = 0.f;
+	is_dead = false;
 
 	enemy_move = { Vec3f(randFloat(-6.f, 6.f), randFloat(-2.f, 2.f), -10.f),
 		Vec3f(randFloat(-5.f, 5.f), randFloat(-2.f, 2.f), randFloat(-9.f, -5.f)),

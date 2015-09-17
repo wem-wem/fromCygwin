@@ -3,7 +3,8 @@
 Bullet::Bullet(Vec3f player_pos){
 	pos_ = player_pos;
 	speed_ = Vec3f(0, 0, -0.1f);
-	life = true;
+	is_dead = false;
+	size = Vec2f(1.0f, 1.0f);
 	setup();
 }
 
@@ -27,4 +28,15 @@ void Bullet::draw()
 	gl::scale(Vec3f(0.2f, 0.2f, 0.2f));
 	gl::draw(mesh);
 	gl::popModelView();
+}
+
+
+void Bullet::hit()
+{
+	this->is_dead = true;
+}
+
+bool Bullet::isDead()
+{
+	return is_dead;
 }

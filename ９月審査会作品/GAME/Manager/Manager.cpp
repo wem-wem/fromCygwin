@@ -44,7 +44,7 @@ void Manager::update(Vec2i& direction, bool& istouch)
 	}
 
 
-	// リストに弾の情報がある場合、その先頭アドレスを取得
+	// イテレータ取得
 	auto bullet_it = bullet_obj.begin();
 
 	// リストの先頭から最後まで弾を処理していく
@@ -57,10 +57,10 @@ void Manager::update(Vec2i& direction, bool& istouch)
 			bullet_it = bullet_obj.erase(bullet_it);
 		}
 
-		// 敵に当たった場合の消滅判定
-		else if((*bullet_it)->getPos().x < 0.f)
+		// 弾の衝突フラグがtrueになっても消す
+		else if ((*bullet_it)->isDead())
 		{
-		
+			bullet_it = bullet_obj.erase(bullet_it);
 		}
 
 		else
@@ -82,6 +82,7 @@ void Manager::update(Vec2i& direction, bool& istouch)
 		enemy_timer_ = -1;
 	}
 
+	// イテレータ取得
 	auto enemy_it = enemy_obj.begin();
 
 	// リストの先頭から最後まで弾を処理していく
@@ -95,6 +96,11 @@ void Manager::update(Vec2i& direction, bool& istouch)
 			enemy_it = enemy_obj.erase(enemy_it);
 		}
 
+		else if ((*enemy_it)->isDead())
+		{
+			enemy_it = enemy_obj.erase(enemy_it);
+		}
+
 		else
 		{
 			// 次の弾のアドレスへ移動
@@ -104,65 +110,18 @@ void Manager::update(Vec2i& direction, bool& istouch)
 #pragma endregion
 
 
-	//// 失敗１…iteratorを回してないので当然ですが、起動直後にエラーで停止
-	//if ((*bullet_it)->getPos().x < (*enemy_it)->getPos().x + (*enemy_it)->getSize().x &&
-	//	(*bullet_it)->getPos().x > (*enemy_it)->getPos().x - (*enemy_it)->getSize().x)
-	//{
-	//	bullet_it = bullet_obj.erase(bullet_it);
-	//	enemy_it = enemy_obj.erase(enemy_it);
-	//}
-	//else
-	//{
-	//	bullet_it++;
-	//	enemy_it++;
-	//}
-
-
-	//// 失敗２…上の別々に書いていた処理をまとめて、中で処理しようとしてみた結果大失敗
-	////　　　　画面が表示されるもフリーズ
-	//for (auto bullet_it = bullet_obj.begin(); bullet_it != bullet_obj.end();)
-	//{
-	//	for (auto enemy_it = enemy_obj.begin(); enemy_it != enemy_obj.end();)
-	//	{
-	//		(*bullet_it)->update();
-	//		// 一定距離進んだら弾を消す処理
-	//		if ((*bullet_it)->getPos().z < delete_line)
-	//		{
-	//			bullet_it = bullet_obj.erase(bullet_it);
-	//		}
-	//		else
-	//		{
-	//			// 次の弾のアドレスへ移動
-	//			bullet_it++;
-	//		}
-
-
-	//		(*enemy_it)->update();
-	//		// 一定距離進んだら敵を消す処理
-	//		if ((*enemy_it)->getPos().z > enemy_delete_line_)
-	//		{
-	//			enemy_it = enemy_obj.erase(enemy_it);
-	//		}
-	//		else
-	//		{
-	//			// 次の弾のアドレスへ移動
-	//			enemy_it++;
-	//		}
-
-	//		// 判定
-	//		if ((*bullet_it)->getPos().x < (*enemy_it)->getPos().x + (*enemy_it)->getSize().x &&
-	//			(*bullet_it)->getPos().x > (*enemy_it)->getPos().x - (*enemy_it)->getSize().x)
-	//		{
-	//			bullet_it = bullet_obj.erase(bullet_it);
-	//			enemy_it = enemy_obj.erase(enemy_it);
-	//		}
-	//		else
-	//		{
-	//			bullet_it++;
-	//			enemy_it++;
-	//		}
-	//	}
-	//}
+	// 当たり判定
+	for (auto& bullet : bullet_obj)
+	{
+		for (auto& enemy : enemy_obj)
+		{
+			if (collision(enemy, bullet))
+			{
+				bullet->hit();
+				enemy->hit();
+			}
+		}
+	}
 }
 
 
