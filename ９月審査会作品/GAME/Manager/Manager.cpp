@@ -43,7 +43,6 @@ void Manager::update(Vec2i& direction, bool& istouch)
 		shot_timer_ = -1;
 	}
 
-
 	// イテレータ取得
 	auto bullet_it = bullet_obj.begin();
 
@@ -51,21 +50,17 @@ void Manager::update(Vec2i& direction, bool& istouch)
 	while (bullet_it != bullet_obj.end())
 	{
 		(*bullet_it)->update();
-		// 一定距離進んだら弾を消す処理
-		if ((*bullet_it)->getPos().z < delete_line)
-		{
-			bullet_it = bullet_obj.erase(bullet_it);
-		}
-
+		// 一定距離進んだら弾を消す
 		// 弾の衝突フラグがtrueになっても消す
-		else if ((*bullet_it)->isDead())
+		if ((*bullet_it)->getPos().z < delete_line ||
+			(*bullet_it)->isDead())
 		{
 			bullet_it = bullet_obj.erase(bullet_it);
 		}
 
+		// 次の弾のアドレスへ移動
 		else
 		{	
-			// 次の弾のアドレスへ移動
 			bullet_it++;
 		}
 	}
@@ -91,12 +86,8 @@ void Manager::update(Vec2i& direction, bool& istouch)
 		(*enemy_it)->update();
 
 		// 一定距離進んだら敵を消す処理
-		if ((*enemy_it)->getPos().z > enemy_delete_line_)
-		{
-			enemy_it = enemy_obj.erase(enemy_it);
-		}
-
-		else if ((*enemy_it)->isDead())
+		if ((*enemy_it)->getPos().z > enemy_delete_line_ ||
+			(*enemy_it)->isDead())
 		{
 			enemy_it = enemy_obj.erase(enemy_it);
 		}
@@ -108,7 +99,6 @@ void Manager::update(Vec2i& direction, bool& istouch)
 		}
 	}
 #pragma endregion
-
 
 	// 当たり判定
 	for (auto& bullet : bullet_obj)
