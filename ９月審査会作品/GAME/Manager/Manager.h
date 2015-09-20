@@ -30,9 +30,6 @@ public:
 	void setup();
 	void update(Vec2i&, bool&);
 	void draw();
-	bool collision(EnemySP& enemy, BulletSP& bullet)
-	{
-		return true;
-	}
+	bool collision(EnemySP&, BulletSP&);
 };
 

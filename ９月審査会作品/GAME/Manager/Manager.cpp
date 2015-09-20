@@ -130,3 +130,14 @@ void Manager::draw()
 		bullets->draw();
 	}
 }
+
+bool Manager::collision(EnemySP& enemy, BulletSP& bullet)
+{
+	// Œ»Ý‚˜À•W‚Å‚Ì‚Ý”»’è
+	if (enemy->getPos().x + enemy->getSize().x > bullet->getPos().x &&
+		enemy->getPos().x - enemy->getSize().x < bullet->getPos().x)
+	{
+		return true;
+	}
+}
+
