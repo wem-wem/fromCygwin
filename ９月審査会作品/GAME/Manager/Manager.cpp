@@ -110,6 +110,7 @@ void Manager::update(Vec2i& direction, bool& istouch,
 				bullet->hit();
 				enemy->hit();
 				hit_SE->start();
+				particle->splitCubeInit(enemy->getPos());
 				UI->setScore(UI->getScore() + enemy->AddScore());
 			}
 		}
@@ -146,6 +147,7 @@ void Manager::draw()
 	{
 		bullets->draw();
 	}
+	particle->splitCubeDraw();
 	UI->draw();
 }
 
