@@ -2,13 +2,14 @@
 
 Enemy::Enemy()
 {
-	speed_ = Vec3f(0.002f, 0.002f, 0.002f);
-	size = Vec2f(1.f, 1.f);
+	speed_ = Vec3f(0.001f, 0.001f, 0.001f);
+	size = Vec3f(0.5f, 0.5f, 0.2f);
 	g_t = 0.f;
 	is_dead = false;
+	point = 10;
 
-	enemy_move = { Vec3f(randFloat(-6.f, 6.f), randFloat(-2.f, 2.f), -10.f),
-		Vec3f(randFloat(-5.f, 5.f), randFloat(-2.f, 2.f), randFloat(-9.f, -5.f)),
+	enemy_move = { Vec3f(randFloat(-4.f, 4.f), randFloat(-2.f, 2.f), -10.f),
+		Vec3f(randFloat(-3.f, 3.f), randFloat(-2.f, 2.f), randFloat(-9.f, -5.f)),
 		Vec3f(randFloat(-3.f, 3.f), randFloat(-2.f, 2.f), randFloat(-9.f, -5.f)),
 		Vec3f(randFloat(-3.f, 3.f), randFloat(-2.f, 2.f), 0.f) };
 
@@ -99,5 +100,10 @@ void Enemy::draw()
 	gl::scale(Vec3f(0.3f, 0.3f, 0.3f));
 	gl::draw(mesh);
 	gl::popModelView();
+}
+
+int Enemy::AddScore()
+{
+	return point;
 }
 

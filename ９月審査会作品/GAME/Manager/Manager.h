@@ -2,6 +2,8 @@
 #include "../Player/Player.h"
 #include "../Bullet/Bullet.h"
 #include "../Enemy/Enemy.h"
+#include "../Camera/GameCamera.h"
+#include "../UI/UI.h"
 
 #include <list>
 
@@ -11,6 +13,8 @@ typedef std::shared_ptr<Manager> ManagerSP;
 class Manager{
 private:
 	PlayerSP player = PlayerSP(new Player);
+	GameUISP UI = GameUISP(new GameUI);
+	GameCameraSP camera = GameCameraSP(new GameCamera);
 
 	// •¡”‚Ì“G‚Æ’e‚ğˆ—‚·‚éˆ×‚ÉƒŠƒXƒg‚ÅŠÇ—‚·‚é
 	std::list<EnemySP> enemy_obj;
@@ -28,7 +32,7 @@ public:
 	Manager();
 
 	void setup();
-	void update(Vec2i&, bool&);
+	void update(Vec2i&, bool&, unsigned int&, unsigned int&);
 	void draw();
 	bool collision(EnemySP&, BulletSP&);
 };

@@ -2,7 +2,7 @@
 
 GameCamera::GameCamera(){
 	player = PlayerSP(new Player);
-	angle_ = 0.f;
+	angle_ = 0.0f;
 	camera_angle_max = 0.3f;
 }
 

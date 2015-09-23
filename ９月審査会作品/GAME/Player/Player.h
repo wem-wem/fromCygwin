@@ -19,5 +19,6 @@ public:
 	virtual void setup();
 	virtual void update(Vec2i);
 	virtual void draw();
+	void setPos(Vec3f resetPos){ pos_ = resetPos; }
 };
 

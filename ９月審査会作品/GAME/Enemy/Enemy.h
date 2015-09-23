@@ -18,8 +18,9 @@ class Enemy : public Object{
 private:
 	ObjLoader* obj;
 	TriMesh mesh;
-	Vec2f size;
+	Vec3f size;
 	bool  is_dead;
+	unsigned int point;
 
 	// ƒxƒWƒF‹Èü‚Å“G‚ğ“®‚©‚µ‚Ä‚İ‚é
 	float g_t;
@@ -30,11 +31,14 @@ public:
 	Enemy();
 
 	Vec3f WsbVec3BezierSpline(Vec3f*, Vec3f*, Vec3f*, Vec3f*, float);
-	Vec2f& getSize(){ return size; }
+	Vec3f& getSize(){ return size; }
 
 	virtual void setup();
 	virtual void update();
 	virtual void draw();
+
+	// “¾“_‰ÁZ
+	int AddScore();
 
 	// ‚±‚ÌŠÖ”‚ªŒÄ‚Î‚ê‚½‚ç€–Sˆµ‚¢‚Æ‚·‚é
 	void hit() { this->is_dead = true; }

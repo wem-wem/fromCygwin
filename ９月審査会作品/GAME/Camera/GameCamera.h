@@ -11,7 +11,6 @@ private:
 	CameraPersp* camera;
 
 	float angle_;
-	float camera_move;
 	float camera_angle_max;
 
 public:
@@ -22,5 +21,6 @@ public:
 	void update();
 	void target_update(Vec2i direction);
 	void SetCamera();
+	void setAngle(float resetAngle){ angle_ = resetAngle; }
 };
 
