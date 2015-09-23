@@ -74,7 +74,7 @@ void Manager::update(Vec2i& direction, bool& istouch,
 	{
 		enemy_obj.push_back(EnemySP(new Enemy));
 	}
-	else if (enemy_timer_ >= 130)
+	else if (enemy_timer_ >= 100)
 	{
 		enemy_timer_ = -1;
 	}
@@ -134,20 +134,26 @@ void Manager::update(Vec2i& direction, bool& istouch,
 
 
 // ƒvƒŒƒCƒ„[E“GE’e‚Ì•`‰æ‚ğ‚Ü‚Æ‚ß‚é
-void Manager::draw()
+void Manager::draw(gl::Material& player_material,
+				   gl::Material& enemy_material,
+				   gl::Material& bullet_material)
 {
+	player_material.apply();
 	player->draw();
 
 	for (auto& enemys : enemy_obj)
 	{
+		enemy_material.apply();
 		enemys->draw();
 	}
+	particle->splitCubeDraw();
 
 	for (auto& bullets : bullet_obj)
 	{
+		bullet_material.apply();
 		bullets->draw();
 	}
-	particle->splitCubeDraw();
+
 	UI->draw();
 }
 

@@ -21,8 +21,9 @@ public:
 				  Vec3f(20.0f, 1.0f, 150.0f) };
 	}
 
-	void draw()
+	void draw(gl::Material& stage_material)
 	{
+		stage_material.apply();
 		gl::pushModelView();
 		gl::drawCube(floor.pos, floor.size);
 		gl::popModelView();

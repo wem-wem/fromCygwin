@@ -37,7 +37,7 @@ public:
 	void setup();
 	void update(Vec2i&, bool&, unsigned int&, unsigned int&,
 				audio::BufferPlayerNodeRef&, audio::BufferPlayerNodeRef&);
-	void draw();
+	void draw(gl::Material&, gl::Material&, gl::Material&);
 	bool collision(EnemySP&, BulletSP&);
 };
 

@@ -15,6 +15,11 @@ private:
 	ResultSP result = ResultSP(new Result);
 	GameUISP UI = GameUISP(new GameUI);
 
+	gl::Material player_material;
+	gl::Material enemy_material;
+	gl::Material bullet_material;
+	gl::Material stage_material;
+
 #pragma region 音響
 	audio::BufferPlayerNodeRef TITLE_BGM;
 	audio::BufferPlayerNodeRef GAME_BGM;
@@ -34,7 +39,7 @@ private:
 	gl::Light* light;
 	bool istouch = false;
 	unsigned int onetime_score;
-	unsigned int scene = RESULT;
+	unsigned int scene = GAME;
 
 	// enumで指定した操作方向を格納する
 	Vec2i touch_direction = Vec2i(DEFAULT, DEFAULT);
@@ -138,6 +143,36 @@ void Game9App::setup()
 	setAudioPlayer(SELECT_SE, SELECT_SE_gain, "SE/se_maoudamashii_system27.mp3");
 	setAudioPlayer(SHOT_SE, SHOT_SE_gain, "SE/shot_SE.mp3");
 	setAudioPlayer(HIT_SE, HIT_SE_gain, "SE/hit_SE.mp3");
+#pragma endregion
+
+#pragma region マテリアル
+	// プレイヤー
+	player_material.setAmbient(Color(0.0f, 1.0f, 1.0f));
+	player_material.setDiffuse(Color(0.0f, 1.0f, 1.0f));
+	player_material.setSpecular(Color(0.0f, 1.0f, 1.0f));
+	player_material.setShininess(80.0f);
+	player_material.setEmission(Color(0.1f, 0.1f, 0.1f));
+
+	// エネミー
+	enemy_material.setAmbient(Color(1.0f, 0.0f, 0.0f));
+	enemy_material.setDiffuse(Color(1.0f, 0.0f, 0.0f));
+	enemy_material.setSpecular(Color(1.0f, 1.0f, 1.0f));
+	enemy_material.setShininess(40.0f);
+	enemy_material.setEmission(Color(1.0f, 1.0f, 0.1f));
+
+	// バレット
+	bullet_material.setAmbient(Color(1.0f, 1.0f, 1.0f));
+	bullet_material.setDiffuse(Color(1.0f, 1.0f, 1.0f));
+	bullet_material.setSpecular(Color(1.0f, 1.0f, 1.0f));
+	bullet_material.setShininess(80.0f);
+	bullet_material.setEmission(Color(1.0f, 1.0f, 0.1f));
+
+	// ステージ
+	stage_material.setAmbient(Color(0.3f, 0.3f, 0.3f));
+	stage_material.setDiffuse(Color(0.3f, 0.3f, 0.3f));
+	stage_material.setSpecular(Color(0.3f, 0.3f, 0.3f));
+	stage_material.setShininess(10.0f);
+	stage_material.setEmission(Color(0.3f, 0.3f, 0.3f));
 #pragma endregion
 
 	Rand::randomize();
@@ -257,8 +292,10 @@ void Game9App::draw()
 			break;
 
 		case GAME:
-			g_manager->draw();
-			g_stage->draw();
+			g_manager->draw(player_material,
+							enemy_material,
+							bullet_material);
+			g_stage->draw(stage_material);
 			break;
 
 		case RESULT:

@@ -2,7 +2,7 @@
 
 Enemy::Enemy()
 {
-	speed_ = Vec3f(0.001f, 0.001f, 0.001f);
+	speed_ = Vec3f(0.002f, 0.002f, 0.002f);
 	size = Vec3f(0.5f, 0.5f, 0.2f);
 	g_t = 0.f;
 	is_dead = false;
