@@ -32,7 +32,8 @@ public:
 	Manager();
 
 	void setup();
-	void update(Vec2i&, bool&, unsigned int&, unsigned int&);
+	void update(Vec2i&, bool&, unsigned int&, unsigned int&,
+				audio::BufferPlayerNodeRef&, audio::BufferPlayerNodeRef&);
 	void draw();
 	bool collision(EnemySP&, BulletSP&);
 };

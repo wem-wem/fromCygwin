@@ -20,15 +20,11 @@ private:
 	PlayerSP player = PlayerSP(new Player);
 	GameCameraSP camera = GameCameraSP(new GameCamera);
 
-	float RESULT_rx;
-	float SCORE_rx;
-	float text_rx;
-
 	// スコア表示の演出用
-	unsigned int random_score;
-	Vec2f sccore_direction_RESULT;
-	Vec2f sccore_direction_SCORE;
-	Vec2f sccore_direction_TEXT;
+	unsigned int view_score;
+	float direction_timer_RESULT;
+	float direction_timer_SCORE;
+	float direction_timer_TEXT;
 
 	// 画面が切り替わった直後に誤ってシーンを切り替えない為のタイマー
 	unsigned int touch_timer;

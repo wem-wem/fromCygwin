@@ -5,7 +5,7 @@ Title::Title(){
 	// 変数の初期化
 	text_alpha = 0;
 	text_color = ColorA(1, 1, 1, 0);
-	title_text_color = ColorA(1, 1, 0, 1);
+	title_text_color = ColorA(1, 1, 0.2f, 1);
 	touch_timer = 0;
 	direction_timer = 120.0;
 
@@ -52,7 +52,7 @@ void Title::update(const bool& istouch,
 	getTouch(istouch, scene, SELECT_SE);
 
 	// タイトルロゴ演出
-	if (direction_timer < 120 && direction_timer > 1)
+	if (direction_timer > 1)
 	{
 		title_direction_WIDE = Vec2f(randFloat(-40.f * (direction_timer / 2), -40.f * (-direction_timer / 2)),
 									  -70.f);

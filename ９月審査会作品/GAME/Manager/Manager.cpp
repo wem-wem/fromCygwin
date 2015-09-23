@@ -17,7 +17,9 @@ void Manager::setup()
 
 
 void Manager::update(Vec2i& direction, bool& istouch,
-					 unsigned int& scene, unsigned int& score)
+					 unsigned int& scene, unsigned int& score,
+					 audio::BufferPlayerNodeRef& shot_SE,
+					 audio::BufferPlayerNodeRef& hit_SE)
 {
 	player->update(direction);
 	UI->update();
@@ -28,8 +30,9 @@ void Manager::update(Vec2i& direction, bool& istouch,
 		shot_timer_++;
 		if (shot_timer_ == 0)
 		{
-			// ’e‚ð‚P‚ÂƒŠƒXƒg‚É’Ç‰Á‚·‚é
+			// ’e‚ð‚P‚ÂƒŠƒXƒg‚É’Ç‰Á‚·‚é(”­ŽË)
 			bullet_obj.push_back(BulletSP(new Bullet(player->getPos())));
+			shot_SE->start();
 		}
 
 		// ‚P•bŒo‰ß‚µ‚½‚çƒ^ƒCƒ}[‚ðƒŠƒZƒbƒg
@@ -71,7 +74,7 @@ void Manager::update(Vec2i& direction, bool& istouch,
 	{
 		enemy_obj.push_back(EnemySP(new Enemy));
 	}
-	else if (enemy_timer_ >= 150)
+	else if (enemy_timer_ >= 130)
 	{
 		enemy_timer_ = -1;
 	}
@@ -106,6 +109,7 @@ void Manager::update(Vec2i& direction, bool& istouch,
 			{
 				bullet->hit();
 				enemy->hit();
+				hit_SE->start();
 				UI->setScore(UI->getScore() + enemy->AddScore());
 			}
 		}
@@ -116,7 +120,7 @@ void Manager::update(Vec2i& direction, bool& istouch,
 	if (UI->getTime() <= 0)
 	{
 		scene = RESULT;
-		UI->setTime(20 * 60);
+		UI->setTime(30 * 60);
 		score = UI->getScore();
 		UI->setScore(0);
 

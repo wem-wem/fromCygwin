@@ -17,24 +17,24 @@ private:
 
 #pragma region 音響
 	audio::BufferPlayerNodeRef TITLE_BGM;
-	audio::BufferPlayerNodeRef SELECT_SE;
+	audio::BufferPlayerNodeRef GAME_BGM;
 	audio::BufferPlayerNodeRef RESULT_BGM;
-	audio::BufferPlayerNodeRef ITEM_GET_SE;
-	audio::BufferPlayerNodeRef JUMP_SE;
-	audio::BufferPlayerNodeRef DAMAGE_SE;
+	audio::BufferPlayerNodeRef SELECT_SE;
+	audio::BufferPlayerNodeRef SHOT_SE;
+	audio::BufferPlayerNodeRef HIT_SE;
 
 	audio::GainNodeRef TITLE_BGM_gain;
-	audio::GainNodeRef SELECT_SE_gain;
+	audio::GainNodeRef GAME_BGM_gain;
 	audio::GainNodeRef RESULT_BGM_gain;
-	audio::GainNodeRef ITEM_GET_SE_gain;
-	audio::GainNodeRef JUMP_SE_gain;
-	audio::GainNodeRef DAMAGE_SE_gain;
+	audio::GainNodeRef SELECT_SE_gain;
+	audio::GainNodeRef SHOT_SE_gain;
+	audio::GainNodeRef HIT_SE_gain;
 #pragma endregion
 
 	gl::Light* light;
 	bool istouch = false;
 	unsigned int onetime_score;
-	unsigned int scene = TITLE;
+	unsigned int scene = RESULT;
 
 	// enumで指定した操作方向を格納する
 	Vec2i touch_direction = Vec2i(DEFAULT, DEFAULT);
@@ -133,11 +133,11 @@ void Game9App::setup()
 {
 #pragma region サウンド
 	setAudioPlayer(TITLE_BGM, TITLE_BGM_gain, "BGM/title_BGM.mp3");
-	setAudioPlayer(SELECT_SE, SELECT_SE_gain, "SE/se_maoudamashii_system27.mp3");
+	setAudioPlayer(GAME_BGM, GAME_BGM_gain, "BGM/game_BGM.mp3");
 	setAudioPlayer(RESULT_BGM, RESULT_BGM_gain, "BGM/result_BGM.mp3");
-	setAudioPlayer(ITEM_GET_SE, ITEM_GET_SE_gain, "SE/se_maoudamashii_system24.mp3");
-	setAudioPlayer(JUMP_SE, JUMP_SE_gain, "SE/jump.mp3");
-	setAudioPlayer(DAMAGE_SE, DAMAGE_SE_gain, "SE/damage.mp3");
+	setAudioPlayer(SELECT_SE, SELECT_SE_gain, "SE/se_maoudamashii_system27.mp3");
+	setAudioPlayer(SHOT_SE, SHOT_SE_gain, "SE/shot_SE.mp3");
+	setAudioPlayer(HIT_SE, HIT_SE_gain, "SE/hit_SE.mp3");
 #pragma endregion
 
 	Rand::randomize();
@@ -172,13 +172,17 @@ void Game9App::update()
 			TITLE_BGM_gain->setValue(0.3f);
 			SELECT_SE_gain->setValue(0.3f);
 
-			// リザルトのBGMを停止
+			// リザルトと本編のBGMを停止
+			if (GAME_BGM->isEnabled())
+			{
+				GAME_BGM->stop();
+			}
 			if (RESULT_BGM->isEnabled())
 			{
 				RESULT_BGM->stop();
 			}
 
-			// BGMをループ再生
+			// タイトルBGMをループ再生
 			if (!TITLE_BGM->isEnabled())
 			{
 				TITLE_BGM->start();
@@ -188,32 +192,40 @@ void Game9App::update()
 			break;
 
 		case GAME:
-			TITLE_BGM_gain->setValue(0.2f);
-			ITEM_GET_SE_gain->setValue(0.4f);
-			JUMP_SE_gain->setValue(0.4f);
-			DAMAGE_SE_gain->setValue(0.4f);
+			GAME_BGM_gain->setValue(0.2f);
+			SHOT_SE_gain->setValue(0.3f);
+			HIT_SE_gain->setValue(0.3f);
 
-			// リザルトのBGMを停止
+			// タイトルとリザルトのBGMを停止
+			if (TITLE_BGM->isEnabled())
+			{
+				TITLE_BGM->stop();
+			}
 			if (RESULT_BGM->isEnabled())
 			{
 				RESULT_BGM->stop();
 			}
 
-			// BGMをループ再生
-			if (!TITLE_BGM->isEnabled())
+			// 本編BGMをループ再生
+			if (!GAME_BGM->isEnabled())
 			{
-				TITLE_BGM->start();
+				GAME_BGM->start();
 			}
 
 			g_camera->update();
-			g_manager->update(touch_direction, istouch, scene, onetime_score);
+			g_manager->update(touch_direction, istouch, scene, onetime_score,
+							  SHOT_SE, HIT_SE);
 			g_camera->target_update(touch_direction);
 			break;
 
 		case RESULT:
 			RESULT_BGM_gain->setValue(0.3f);
 
-			// タイトルのBGMを停止
+			// ゲームとタイトルのBGMを停止
+			if (GAME_BGM->isEnabled())
+			{
+				GAME_BGM->stop();
+			}
 			if (TITLE_BGM->isEnabled())
 			{
 				TITLE_BGM->stop();

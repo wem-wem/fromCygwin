@@ -1,7 +1,7 @@
 #include "UI.h"
 
 GameUI::GameUI(){
-	_time = 20 * 60;
+	_time = 30 * 60;
 	_score = 0;
 }
 
